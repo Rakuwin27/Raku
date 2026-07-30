@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Guías claras y soporte personalizado para disfrutar tus juegos de forma segura." />
+    <title>Raku — Guías que sí se entienden</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f8fc;
+        --surface: rgba(255, 255, 255, 0.82);
+        --surface-solid: #ffffff;
+        --text: #14213d;
+        --muted: #667085;
+        --line: #e5eaf3;
+        --primary: #315bda;
+        --primary-strong: #2446b5;
+        --primary-soft: #e9efff;
+        --accent: #19a78b;
+        --accent-soft: #dcf7f0;
+        --shadow: 0 20px 55px rgba(28, 53, 105, 0.1);
+      }
+
+      [data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0b1120;
+        --surface: rgba(19, 29, 51, 0.78);
+        --surface-solid: #131d33;
+        --text: #f3f7ff;
+        --muted: #a8b3c9;
+        --line: #263451;
+        --primary: #87a5ff;
+        --primary-strong: #a9bdff;
+        --primary-soft: #1c315f;
+        --accent: #59d6bc;
+        --accent-soft: #123f40;
+        --shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.55;
+        transition: background 0.25s ease, color 0.25s ease;
+      }
+      a { color: inherit; text-decoration: none; }
+      .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+      .eyebrow {
+        color: var(--primary);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .site-header { padding: 20px 0; position: relative; z-index: 2; }
+      nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+      .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 850; letter-spacing: -0.035em; font-size: 1.15rem; }
+      .brand-mark {
+        display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px;
+        color: white; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: 0 7px 18px rgba(49, 91, 218, 0.28);
+      }
+      .nav-links { display: flex; gap: 24px; align-items: center; color: var(--muted); font-size: 0.92rem; font-weight: 650; }
+      .nav-links a:hover { color: var(--primary); }
+      .theme-toggle {
+        display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--text);
+        padding: 9px 12px; border-radius: 999px; font: inherit; font-size: 0.84rem; font-weight: 700;
+      }
+      .theme-toggle:hover { border-color: var(--primary); }
+      .hero { overflow: hidden; position: relative; padding: 68px 0 100px; }
+      .hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px); }
+      .hero::before { width: 520px; height: 520px; background: linear-gradient(145deg, var(--primary-soft), transparent 68%); top: -230px; right: -140px; }
+      .hero::after { width: 430px; height: 430px; background: linear-gradient(145deg, var(--accent-soft), transparent 70%); bottom: -300px; left: -150px; }
+      .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 68px; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { max-width: 690px; margin: 12px 0 21px; font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -0.07em; }
+      .hero-copy { color: var(--muted); max-width: 580px; font-size: 1.08rem; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+      .button { display: inline-flex; justify-content: center; align-items: center; border-radius: 12px; padding: 13px 19px; font-weight: 800; font-size: 0.94rem; border: 1px solid transparent; transition: transform 0.2s, background 0.2s, border-color 0.2s; }
+      .button:hover { transform: translateY(-2px); }
+      .button-primary { background: var(--primary); color: #fff; box-shadow: 0 10px 22px rgba(49, 91, 218, 0.22); }
+      .button-primary:hover { background: var(--primary-strong); }
+      .button-secondary { border-color: var(--line); background: var(--surface); color: var(--text); }
+      .trust { display: flex; gap: 22px; margin-top: 44px; color: var(--muted); font-size: 0.84rem; font-weight: 650; }
+      .trust span { display: inline-flex; align-items: center; gap: 7px; }
+      .check { color: var(--accent); font-size: 1.15rem; }
+      .preview { padding: 17px; border: 1px solid var(--line); background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); backdrop-filter: blur(12px); }
+      .preview-window { border: 1px solid var(--line); overflow: hidden; border-radius: 16px; background: var(--surface-solid); }
+      .window-top { display: flex; align-items: center; gap: 6px; padding: 13px 15px; border-bottom: 1px solid var(--line); }
+      .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+      .dot:nth-child(1) { background: #f17d78; } .dot:nth-child(2) { background: #f2c26a; } .dot:nth-child(3) { background: #65c692; }
+      .guide-card { padding: 28px; }
+      .guide-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.82rem; font-weight: 750; }
+      .guide-title { margin: 14px 0 20px; font-size: 1.45rem; letter-spacing: -0.04em; }
+      .steps { display: grid; gap: 11px; }
+      .step { display: flex; gap: 10px; align-items: center; padding: 10px 12px; color: var(--muted); background: var(--bg); border-radius: 10px; font-size: 0.86rem; }
+      .step-no { display: grid; flex: 0 0 22px; height: 22px; place-items: center; color: var(--primary); background: var(--primary-soft); border-radius: 50%; font-size: 0.72rem; font-weight: 850; }
+      .safe-note { margin-top: 20px; padding: 12px; border-radius: 10px; color: var(--accent); background: var(--accent-soft); font-size: 0.78rem; font-weight: 700; }
+      section { padding: 90px 0; }
+      .section-heading { max-width: 620px; margin-bottom: 38px; }
+      h2 { margin: 9px 0 11px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.055em; }
+      .section-heading p { margin-bottom: 0; color: var(--muted); }
+      .offers { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .offer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .offer { display: flex; flex-direction: column; min-height: 345px; padding: 34px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-solid); }
+      .offer.featured { position: relative; isolation: isolate; overflow: hidden; border-color: #d8a642; background: linear-gradient(140deg, var(--surface-solid) 48%, var(--primary-soft) 100%); box-shadow: 0 28px 65px rgba(30, 53, 112, 0.2); transform: translateY(-8px); }
+      .offer.featured::before { content: ""; position: absolute; z-index: -1; width: 260px; height: 260px; border-radius: 50%; right: -110px; top: -135px; background: radial-gradient(circle, rgba(233, 185, 75, 0.35), transparent 68%); }
+      .featured-badge { position: absolute; right: 22px; top: 22px; padding: 7px 10px; border: 1px solid rgba(181, 126, 22, 0.42); border-radius: 999px; color: #935c08; background: #fff5d9; font-size: 0.67rem; font-weight: 900; letter-spacing: 0.08em; }
+      [data-theme="dark"] .featured-badge { color: #ffcf70; background: #49330c; border-color: #9b6c1a; }
+      .offer.featured .offer-icon { color: #9c670f; background: linear-gradient(135deg, #fff3ce, #efc461); box-shadow: 0 10px 20px rgba(187, 131, 25, 0.2); }
+      .premium-note { margin: -1px 0 16px; color: var(--primary); font-size: 0.8rem; font-weight: 800; }
+      .offer.featured .button-primary { width: 100%; color: #241600; background: linear-gradient(135deg, #f7d474, #d8911f); box-shadow: 0 12px 25px rgba(187, 124, 14, 0.3); }
+      .offer.featured .button-primary:hover { background: linear-gradient(135deg, #ffe398, #e3a02c); }
+      .offer-icon { display: grid; place-items: center; height: 45px; width: 45px; margin-bottom: 22px; border-radius: 13px; background: var(--primary-soft); color: var(--primary); font-size: 1.3rem; }
+      h3 { margin-bottom: 9px; font-size: 1.3rem; letter-spacing: -0.035em; }
+      .offer p { color: var(--muted); }
+      .offer ul { display: grid; gap: 9px; margin: 12px 0 24px; padding: 0; list-style: none; color: var(--muted); font-size: 0.9rem; }
+      .offer li::before { content: "✓"; margin-right: 9px; color: var(--accent); font-weight: 900; }
+      .offer .button { margin-top: auto; align-self: flex-start; }
+      .game-guide-list { display: grid; gap: 22px; }
+      .game-guide { display: grid; grid-template-columns: 1.05fr 0.95fr; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 14px 34px rgba(28, 53, 105, 0.06); }
+      .game-video { display: grid; min-height: 255px; place-items: center; padding: 32px; color: var(--primary); background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft)); text-align: center; }
+      .game-video .play { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%; color: #fff; background: var(--primary); box-shadow: 0 10px 20px rgba(49, 91, 218, 0.2); }
+      .game-video strong { display: block; margin-bottom: 4px; font-size: 1.05rem; }
+      .game-video small { display: block; color: var(--muted); }
+      .game-video .button { margin-top: 18px; }
+      .game-resource { display: flex; flex-direction: column; padding: 32px; }
+      .game-tag { display: inline-flex; align-self: flex-start; margin-bottom: 15px; padding: 6px 9px; border-radius: 999px; color: var(--primary); background: var(--primary-soft); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.08em; }
+      .game-resource h3 { font-size: 1.45rem; }
+      .game-resource p { color: var(--muted); }
+      .game-resource .button { margin-top: auto; align-self: flex-start; }
+      .resource-grid { display: grid; gap: 22px; }
+      .resource-card { display: grid; grid-template-columns: 1.05fr 0.95fr; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 14px 34px rgba(28, 53, 105, 0.06); }
+      .disclaimer { margin-top: 17px; font-size: 0.8rem; color: var(--muted); }
+      footer { padding: 38px 0; border-top: 1px solid var(--line); }
+      .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .socials { display: flex; flex-wrap: wrap; gap: 10px; }
+      .socials a { padding: 8px 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 9px; font-size: 0.8rem; font-weight: 750; }
+      .socials a:hover { color: var(--primary); border-color: var(--primary); }
+      .copyright { margin: 0; color: var(--muted); font-size: 0.8rem; }
+      @media (max-width: 780px) {
+        .nav-links { display: none; }
+        .hero { padding-top: 42px; }
+        .hero-grid, .offer-grid, .game-guide, .resource-card { grid-template-columns: 1fr; gap: 30px; }
+        .preview { max-width: 520px; }
+        .trust { align-items: flex-start; flex-direction: column; gap: 9px; }
+        .footer-row { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="container" aria-label="Navegación principal">
+        <a class="brand" href="#inicio" aria-label="Raku, inicio"><span class="brand-mark">R</span>Raku</a>
+        <div class="nav-links">
+          <a href="#guias">Guías</a>
+          <a href="#recursos">Videos y recursos</a>
+          <a href="#ayuda">Soporte Premium</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar a modo oscuro"><span id="theme-icon">☾</span><span id="theme-label">Oscuro</span></button>
+      </nav>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">Solucones rápidas. archivos listos.</div>
+            <h1>Juega más.<br />Sin pagar nada.</h1>
+            <p class="hero-copy">Encuentra las carpetas y archivos necesarios para que tus juegos abran a la primera. Sin rodeos y en minutos. Cuando necesites una mano, también puedes solicitar Soporte Premium.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#guias">Ver guías gratis</a>
+              <a class="button button-secondary" href="#ayuda">Quiero Soporte Premium</a>
+            </div>
+            <div class="trust" aria-label="Compromisos de Raku">
+              <span><b class="check">✓</b> Explicado en video</span>
+              <span><b class="check">✓</b> Archivos listos para reemplazar</span>
+              <span><b class="check">✓</b> Sin pasos innecesarios</span>
+            </div>
+          </div>
+          <aside class="preview" aria-label="Ejemplo de una guía">
+            <div class="preview-window">
+              <div class="window-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+              <div class="guide-card">
+                <div class="guide-label"><span>GUÍA RÁPIDA</span><span>3 min</span></div>
+                <h2 class="guide-title">Compra tus juegos de forma fácil</h2>
+                <div class="steps">
+                  <div class="step"><span class="step-no">1</span>Revisa los requisitos de la guía</div>
+                  <div class="step"><span class="step-no">2</span>Sigue cada paso en el orden indicado</div>
+                  <div class="step"><span class="step-no">3</span>Comprueba que todo funciona</div>
+                </div>
+                <div class="safe-note">✦  Totalmente sin Virus.</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="offers" id="guias">
+        <div class="container">
+          <div class="section-heading">
+            <div class="eyebrow">Elige tu ritmo</div>
+            <h2>Dos formas de avanzar</h2>
+            <p>Empieza gratis y aprende a tu ritmo, o reserva tiempo para resolver tu problema con acompañamiento exclusivo.</p>
+          </div>
+          <div class="offer-grid">
+            <article class="offer">
+              <div class="offer-icon">▷</div>
+              <h3>Guías gratis</h3>
+              <p>Para quienes prefieren hacerlo por su cuenta con instrucciones breves y visuales.</p>
+              <ul>
+                <li>Pasos sencillos y ordenados</li>
+                <li>Archivos verificados</li>
+                <li>Videos cortos, próximamente</li>
+              </ul>
+              <a class="button button-secondary" href="#recursos">Explorar guías</a>
+            </article>
+            <article class="offer featured" id="ayuda">
+              <span class="featured-badge">★ MÁS ELEGIDO</span>
+              <div class="offer-icon">♛</div>
+              <h3>Soporte Premium</h3>
+              <p class="premium-note">Atención personalizada para avanzar sin perder tiempo.</p>
+              <p>Si te atascas, reserva una sesión para revisar una instalación permitida y entender qué hacer, paso a paso.</p>
+              <ul>
+                <li>Atención personalizada</li>
+                <li>Explicación durante el proceso</li>
+                <li>Precio claro antes de reservar</li>
+              </ul>
+              <a class="button button-primary" href="https://wa.me/51933231659?text=Deseo%20que%20me%20ayudes%20con%20el%20servicio%20premium." target="_blank" rel="noreferrer">✦ Consultar por WhatsApp</a>
+            </article>
+          </div>
+          <p class="disclaimer">Todo el contenido se crea para hacerte feliz y brindarte soporte técnico. Yo pongo el juego y tú pones la magia.</p>
+        </div>
+      </section>
+
+      <section class="resources" id="recursos">
+        <div class="container">
+          <div class="section-heading">
+            <div class="eyebrow">Magia para tus juego</div>
+            <h2>Solo material del bueno</h2>
+            <p>Magia lista para usar. Aquí tienes los recursos probados para saltarte los errores y dejar tu juego fino.</p>
+          </div>
+          <div class="resource-grid">
+            <!-- Cambia href="href" por tu enlace autorizado cuando esté listo. -->
+            <article class="resource-card">
+              <div class="game-video">
+                <div>
+                  <div class="play">▶</div>
+                  <strong>Video de FC 26</strong>
+                  <small>Tu tutorial de este juego aparecerá aquí.</small>
+                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
+                </div>
+              </div>
+              <div class="game-resource">
+              <span class="game-tag">JUEGO 01</span>
+              <h3>FC 26</h3>
+              <p>🔑 Código de extracción: Raku<p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
+              <a class="button button-secondary" href="https://drive.google.com/file/d/1OLFiVjwY0acyVw5bfuL671krmSvqjEOw">Enlace</a>
+              </div>
+            </article>
+            <article class="resource-card">
+              <div class="game-video">
+                <div>
+                  <div class="play">▶</div>
+                  <strong>Video de GTA V</strong>
+                  <small>Tu tutorial de este juego aparecerá aquí.</small>
+                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
+                </div>
+              </div>
+              <div class="game-resource">
+              <span class="game-tag">JUEGO 02</span>
+              <h3>GTA V</h3>
+              <p>🔑 Código de extracción: Raku<p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
+              <a class="button button-secondary" href="https://drive.google.com/file/d/1Y9s071yj88LwtKyHvDlH-G_QkJd9kYRR">Enlace</a>
+              </div>
+            </article>
+            <article class="resource-card">
+              <div class="game-video">
+                <div>
+                  <div class="play">▶</div>
+                  <strong>Video de Steam Free</strong>
+                  <small>Tu tutorial de este juego aparecerá aquí.</small>
+                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
+                </div>
+              </div>
+              <div class="game-resource">
+              <span class="game-tag">JUEGO 03</span>
+              <h3>Steam Free</h3>
+              <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
+              <a class="button button-secondary" href="https://lua.tools/app">Enlace</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-row">
+        <a class="brand" href="#inicio"><span class="brand-mark">R</span>Raku</a>
+        <div class="socials" aria-label="Redes sociales">
+          <a href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer" aria-label="YouTube">YouTube</a>
+          <a href="https://www.tiktok.com/@rakuwin27" target="_blank" rel="noreferrer" aria-label="TikTok">TikTok</a>
+          <a href="https://www.instagram.com/rakuwin27" target="_blank" rel="noreferrer" aria-label="Instagram">Instagram</a>
+        </div>
+        <p class="copyright">© <span id="year"></span> Raku</p>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      const savedTheme = localStorage.getItem('raku-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      function setTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        const dark = theme === 'dark';
+        icon.textContent = dark ? '☀' : '☾';
+        label.textContent = dark ? 'Claro' : 'Oscuro';
+        toggle.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+        localStorage.setItem('raku-theme', theme);
+      }
+
+      setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+      toggle.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
