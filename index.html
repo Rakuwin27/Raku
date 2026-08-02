@@ -245,7 +245,6 @@
             <p>Magia lista para usar. Aquí tienes los recursos probados para saltarte los errores y dejar tu juego fino.</p>
           </div>
           <div class="resource-grid">
-            <!-- Cambia href="href" por tu enlace autorizado cuando esté listo. -->
             <article class="resource-card">
               <div class="game-video">
                 <div>
@@ -313,6 +312,22 @@
                 <a class="button button-secondary" href="https://drive.google.com/file/d/1qGp3LW7PczwyLN7jelmuLbA9Zsb__iML">Enlace</a>
               </div>
             </article>
+            <article class="resource-card">
+              <div class="game-video">
+                <div>
+                  <div class="play">▶</div>
+                  <strong>Video de Dolin Tools</strong>
+                  <small>Tu tutorial de este juego aparecerá aquí.</small>
+                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
+                </div>
+              </div>
+              <div class="game-resource">
+                <span class="game-tag">JUEGO 05</span>
+                <h3>Dolin Tools</h3>
+                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
+                <a class="button button-secondary" href="https://drive.google.com/file/d/13eCNh0eKCmRIlBEvjhuySCbdbc-MDTw5">Enlace</a>
+              </div>
+            </article>
           </div>
         </div>
       </section>
@@ -338,7 +353,7 @@
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
       function setTheme(theme) {
-        document.documentElement.dataset.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
         const dark = theme === 'dark';
         icon.textContent = dark ? '☀' : '☾';
         label.textContent = dark ? 'Claro' : 'Oscuro';
@@ -347,7 +362,10 @@
       }
 
       setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
-      toggle.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
       document.getElementById('year').textContent = new Date().getFullYear();
     </script>
   </body>
