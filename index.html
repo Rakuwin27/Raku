@@ -1,406 +1,1002 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Guías claras y soporte personalizado para disfrutar tus juegos de forma segura." />
-    <title>Raku — Guías que sí se entienden</title>
-    <style>
-      :root {
-        color-scheme: light;
-        --bg: #f6f8fc;
-        --surface: rgba(255, 255, 255, 0.82);
-        --surface-solid: #ffffff;
-        --text: #14213d;
-        --muted: #667085;
-        --line: #e5eaf3;
-        --primary: #315bda;
-        --primary-strong: #2446b5;
-        --primary-soft: #e9efff;
-        --accent: #19a78b;
-        --accent-soft: #dcf7f0;
-        --shadow: 0 20px 55px rgba(28, 53, 105, 0.1);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Magias gratis y soporte premium para tus juegos. Actualización semanal." />
+  <title>Raku — Juega más · Paga Menos</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fc;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-solid: #ffffff;
+      --text: #14213d;
+      --muted: #667085;
+      --line: #e5eaf3;
+      --primary: #315bda;
+      --primary-strong: #2446b5;
+      --primary-soft: #e9efff;
+      --accent: #19a78b;
+      --accent-soft: #dcf7f0;
+      --gold: #d8911f;
+      --gold-soft: #fff5d9;
+      --shadow: 0 20px 55px rgba(28, 53, 105, 0.1);
+      --radius: 16px;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0b1120;
+      --surface: rgba(19, 29, 51, 0.82);
+      --surface-solid: #131d33;
+      --text: #f3f7ff;
+      --muted: #a8b3c9;
+      --line: #263451;
+      --primary: #87a5ff;
+      --primary-strong: #a9bdff;
+      --primary-soft: #1c315f;
+      --accent: #59d6bc;
+      --accent-soft: #123f40;
+      --gold: #ffcf70;
+      --gold-soft: #49330c;
+      --shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      transition: background 0.25s, color 0.25s;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
 
-      [data-theme="dark"] {
-        color-scheme: dark;
-        --bg: #0b1120;
-        --surface: rgba(19, 29, 51, 0.78);
-        --surface-solid: #131d33;
-        --text: #f3f7ff;
-        --muted: #a8b3c9;
-        --line: #263451;
-        --primary: #87a5ff;
-        --primary-strong: #a9bdff;
-        --primary-soft: #1c315f;
-        --accent: #59d6bc;
-        --accent-soft: #123f40;
-        --shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
-      }
+    /* Header */
+    .site-header {
+      padding: 18px 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+    nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 850; letter-spacing: -0.035em; font-size: 1.15rem;
+    }
+    .brand-mark {
+      display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+      color: white; background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 7px 18px rgba(49, 91, 218, 0.28); font-weight: 800;
+    }
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      border: 1px solid var(--line); background: var(--surface); color: var(--text);
+      padding: 9px 14px; border-radius: 999px; font: inherit; font-size: 0.84rem; font-weight: 700;
+    }
+    .theme-toggle:hover { border-color: var(--primary); }
 
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      body {
-        margin: 0;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        line-height: 1.55;
-        transition: background 0.25s ease, color 0.25s ease;
-      }
-      a { color: inherit; text-decoration: none; }
-      .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
-      .eyebrow {
-        color: var(--primary);
-        font-size: 0.78rem;
-        font-weight: 800;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-      .site-header { padding: 20px 0; position: relative; z-index: 2; }
-      nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-      .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 850; letter-spacing: -0.035em; font-size: 1.15rem; }
-      .brand-mark {
-        display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px;
-        color: white; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: 0 7px 18px rgba(49, 91, 218, 0.28);
-      }
-      .nav-links { display: flex; gap: 24px; align-items: center; color: var(--muted); font-size: 0.92rem; font-weight: 650; }
-      .nav-links a:hover { color: var(--primary); }
-      .theme-toggle {
-        display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--text);
-        padding: 9px 12px; border-radius: 999px; font: inherit; font-size: 0.84rem; font-weight: 700;
-      }
-      .theme-toggle:hover { border-color: var(--primary); }
-      .hero { overflow: hidden; position: relative; padding: 68px 0 100px; }
-      .hero::before, .hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px); }
-      .hero::before { width: 520px; height: 520px; background: linear-gradient(145deg, var(--primary-soft), transparent 68%); top: -230px; right: -140px; }
-      .hero::after { width: 430px; height: 430px; background: linear-gradient(145deg, var(--accent-soft), transparent 70%); bottom: -300px; left: -150px; }
-      .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 68px; }
-      h1, h2, h3, p { margin-top: 0; }
-      h1 { max-width: 690px; margin: 12px 0 21px; font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -0.07em; }
-      .hero-copy { color: var(--muted); max-width: 580px; font-size: 1.08rem; }
-      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-      .button { display: inline-flex; justify-content: center; align-items: center; border-radius: 12px; padding: 13px 19px; font-weight: 800; font-size: 0.94rem; border: 1px solid transparent; transition: transform 0.2s, background 0.2s, border-color 0.2s; }
-      .button:hover { transform: translateY(-2px); }
-      .button-primary { background: var(--primary); color: #fff; box-shadow: 0 10px 22px rgba(49, 91, 218, 0.22); }
-      .button-primary:hover { background: var(--primary-strong); }
-      .button-secondary { border-color: var(--line); background: var(--surface); color: var(--text); }
-      .trust { display: flex; gap: 22px; margin-top: 44px; color: var(--muted); font-size: 0.84rem; font-weight: 650; }
-      .trust span { display: inline-flex; align-items: center; gap: 7px; }
-      .check { color: var(--accent); font-size: 1.15rem; }
-      .preview { padding: 17px; border: 1px solid var(--line); background: var(--surface); border-radius: 24px; box-shadow: var(--shadow); backdrop-filter: blur(12px); }
-      .preview-window { border: 1px solid var(--line); overflow: hidden; border-radius: 16px; background: var(--surface-solid); }
-      .window-top { display: flex; align-items: center; gap: 6px; padding: 13px 15px; border-bottom: 1px solid var(--line); }
-      .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-      .dot:nth-child(1) { background: #f17d78; } .dot:nth-child(2) { background: #f2c26a; } .dot:nth-child(3) { background: #65c692; }
-      .guide-card { padding: 28px; }
-      .guide-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.82rem; font-weight: 750; }
-      .guide-title { margin: 14px 0 20px; font-size: 1.45rem; letter-spacing: -0.04em; }
-      .steps { display: grid; gap: 11px; }
-      .step { display: flex; gap: 10px; align-items: center; padding: 10px 12px; color: var(--muted); background: var(--bg); border-radius: 10px; font-size: 0.86rem; }
-      .step-no { display: grid; flex: 0 0 22px; height: 22px; place-items: center; color: var(--primary); background: var(--primary-soft); border-radius: 50%; font-size: 0.72rem; font-weight: 850; }
-      .safe-note { margin-top: 20px; padding: 12px; border-radius: 10px; color: var(--accent); background: var(--accent-soft); font-size: 0.78rem; font-weight: 700; }
-      section { padding: 90px 0; }
-      .section-heading { max-width: 620px; margin-bottom: 38px; }
-      h2 { margin: 9px 0 11px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.055em; }
-      .section-heading p { margin-bottom: 0; color: var(--muted); }
-      .offers { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-      .offer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-      .offer { display: flex; flex-direction: column; min-height: 345px; padding: 34px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-solid); }
-      .offer.featured { position: relative; isolation: isolate; overflow: hidden; border-color: #d8a642; background: linear-gradient(140deg, var(--surface-solid) 48%, var(--primary-soft) 100%); box-shadow: 0 28px 65px rgba(30, 53, 112, 0.2); transform: translateY(-8px); }
-      .offer.featured::before { content: ""; position: absolute; z-index: -1; width: 260px; height: 260px; border-radius: 50%; right: -110px; top: -135px; background: radial-gradient(circle, rgba(233, 185, 75, 0.35), transparent 68%); }
-      .featured-badge { position: absolute; right: 22px; top: 22px; padding: 7px 10px; border: 1px solid rgba(181, 126, 22, 0.42); border-radius: 999px; color: #935c08; background: #fff5d9; font-size: 0.67rem; font-weight: 900; letter-spacing: 0.08em; }
-      [data-theme="dark"] .featured-badge { color: #ffcf70; background: #49330c; border-color: #9b6c1a; }
-      .offer.featured .offer-icon { color: #9c670f; background: linear-gradient(135deg, #fff3ce, #efc461); box-shadow: 0 10px 20px rgba(187, 131, 25, 0.2); }
-      .premium-note { margin: -1px 0 16px; color: var(--primary); font-size: 0.8rem; font-weight: 800; }
-      .offer.featured .button-primary { width: 100%; color: #241600; background: linear-gradient(135deg, #f7d474, #d8911f); box-shadow: 0 12px 25px rgba(187, 124, 14, 0.3); }
-      .offer.featured .button-primary:hover { background: linear-gradient(135deg, #ffe398, #e3a02c); }
-      .offer-icon { display: grid; place-items: center; height: 45px; width: 45px; margin-bottom: 22px; border-radius: 13px; background: var(--primary-soft); color: var(--primary); font-size: 1.3rem; }
-      h3 { margin-bottom: 9px; font-size: 1.3rem; letter-spacing: -0.035em; }
-      .offer p { color: var(--muted); }
-      .offer ul { display: grid; gap: 9px; margin: 12px 0 24px; padding: 0; list-style: none; color: var(--muted); font-size: 0.9rem; }
-      .offer li::before { content: "✓"; margin-right: 9px; color: var(--accent); font-weight: 900; }
-      .offer .button { margin-top: auto; align-self: flex-start; }
-      .game-guide-list { display: grid; gap: 22px; }
-      .game-guide { display: grid; grid-template-columns: 1.05fr 0.95fr; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 14px 34px rgba(28, 53, 105, 0.06); }
-      .game-video { display: grid; min-height: 255px; place-items: center; padding: 32px; color: var(--primary); background: linear-gradient(135deg, var(--primary-soft), var(--accent-soft)); text-align: center; }
-      .game-video .play { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%; color: #fff; background: var(--primary); box-shadow: 0 10px 20px rgba(49, 91, 218, 0.2); }
-      .game-video strong { display: block; margin-bottom: 4px; font-size: 1.05rem; }
-      .game-video small { display: block; color: var(--muted); }
-      .game-video .button { margin-top: 18px; }
-      .game-resource { display: flex; flex-direction: column; padding: 32px; }
-      .game-tag { display: inline-flex; align-self: flex-start; margin-bottom: 15px; padding: 6px 9px; border-radius: 999px; color: var(--primary); background: var(--primary-soft); font-size: 0.72rem; font-weight: 850; letter-spacing: 0.08em; }
-      .game-resource h3 { font-size: 1.45rem; }
-      .game-resource p { color: var(--muted); }
-      .game-resource .button { margin-top: auto; align-self: flex-start; }
-      .resource-grid { display: grid; gap: 22px; }
-      .resource-card { display: grid; grid-template-columns: 1.05fr 0.95fr; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--surface-solid); box-shadow: 0 14px 34px rgba(28, 53, 105, 0.06); }
-      .disclaimer { margin-top: 17px; font-size: 0.8rem; color: var(--muted); }
-      footer { padding: 38px 0; border-top: 1px solid var(--line); }
-      .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-      .socials { display: flex; flex-wrap: wrap; gap: 10px; }
-      .socials a { padding: 8px 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 9px; font-size: 0.8rem; font-weight: 750; }
-      .socials a:hover { color: var(--primary); border-color: var(--primary); }
-      .copyright { margin: 0; color: var(--muted); font-size: 0.8rem; }
-      @media (max-width: 780px) {
-        .nav-links { display: none; }
-        .hero { padding-top: 42px; }
-        .hero-grid, .offer-grid, .game-guide, .resource-card { grid-template-columns: 1fr; gap: 30px; }
-        .preview { max-width: 520px; }
-        .trust { align-items: flex-start; flex-direction: column; gap: 9px; }
-        .footer-row { align-items: flex-start; flex-direction: column; }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <nav class="container" aria-label="Navegación principal">
-        <a class="brand" href="#inicio" aria-label="Raku, inicio"><span class="brand-mark">R</span>Raku</a>
-        <div class="nav-links">
-          <a href="#guias">Guías</a>
-          <a href="#recursos">Videos y recursos</a>
-          <a href="#ayuda">Soporte Premium</a>
-        </div>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar a modo oscuro"><span id="theme-icon">☾</span><span id="theme-label">Oscuro</span></button>
-      </nav>
-    </header>
+    /* Hero */
+    .hero {
+      padding: 56px 0 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px);
+    }
+    .hero::before {
+      width: 480px; height: 480px;
+      background: linear-gradient(145deg, var(--primary-soft), transparent 68%);
+      top: -200px; right: -120px;
+    }
+    .hero::after {
+      width: 380px; height: 380px;
+      background: linear-gradient(145deg, var(--accent-soft), transparent 70%);
+      bottom: -220px; left: -130px;
+    }
+    .hero-top {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 36px;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.06em;
+      margin-bottom: 14px;
+    }
+    .hero-copy {
+      color: var(--muted);
+      max-width: 480px;
+      font-size: 1.02rem;
+      margin-bottom: 22px;
+    }
 
-    <main id="inicio">
-      <section class="hero">
-        <div class="container hero-grid">
+    /* Tabs separados */
+    .tab-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 13px 24px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-solid);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(49, 91, 218, 0.25);
+    }
+    .tab-btn:hover:not(.active) {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Botón Premium especial */
+    .tab-btn.premium-btn {
+      position: relative;
+      background: linear-gradient(135deg, #f7d474, #d8911f);
+      color: #241600;
+      border: none;
+      box-shadow: 0 8px 22px rgba(187, 124, 14, 0.35);
+      overflow: hidden;
+    }
+    .tab-btn.premium-btn:hover,
+    .tab-btn.premium-btn.active {
+      background: linear-gradient(135deg, #ffe398, #e3a02c);
+      color: #241600;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(187, 124, 14, 0.45);
+    }
+
+    /* Featured / Recién agregado */
+    .featured-box {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface-solid);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-box .new-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: linear-gradient(135deg, #ff5e5e, #e63946);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      animation: badge-pulse 2s ease-in-out infinite;
+    }
+    @keyframes badge-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(230, 57, 70, 0); }
+    }
+    .featured-box h3 {
+      font-size: 1.05rem;
+      margin: 28px 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .featured-box .featured-sub {
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-bottom: 14px;
+    }
+    .featured-placeholder {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      height: auto;
+      border: none;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      background: #000;
+      overflow: hidden;
+      position: relative;
+    }
+    .featured-placeholder img,
+    .featured-placeholder video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+      font-family: inherit;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(49, 91, 218, 0.22);
+    }
+    .btn-primary:hover { background: var(--primary-strong); }
+    .btn-secondary {
+      border-color: var(--line);
+      background: var(--surface);
+      color: var(--text);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #f7d474, #d8911f);
+      color: #241600;
+      box-shadow: 0 12px 25px rgba(187, 124, 14, 0.28);
+      width: 100%;
+    }
+    .btn-gold:hover { background: linear-gradient(135deg, #ffe398, #e3a02c); }
+
+    /* Search */
+    .search-wrap {
+      margin: 0 auto 42px;
+      max-width: 520px;
+      text-align: center;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      padding: 4px 6px 4px 16px;
+      background: var(--surface-solid);
+      transition: border-color 0.2s;
+    }
+    .search-box:focus-within { border-color: var(--primary); }
+    .search-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font: inherit;
+      font-size: 1rem;
+      padding: 12px 0;
+      color: var(--text);
+      outline: none;
+    }
+    .search-box input::placeholder { color: var(--muted); }
+    .search-icon { color: var(--muted); font-size: 1.15rem; }
+
+    /* Sections */
+    section { padding: 20px 0 70px; }
+    .section-head {
+      margin-bottom: 22px;
+    }
+    .section-head h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+    }
+    .section-head p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .week-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .magias-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .magias-col {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px 18px 18px;
+    }
+    .magias-col h3 {
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+    .magias-col .col-desc {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-bottom: 18px;
+    }
+
+    .games-list {
+      display: grid;
+      gap: 12px;
+    }
+    .game-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-solid);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 88px;
+    }
+    .game-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(28, 53, 105, 0.1);
+      border-color: var(--primary);
+    }
+    .game-card .badge {
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .badge.offline { background: var(--primary-soft); color: var(--primary); }
+    .badge.online { background: var(--accent-soft); color: var(--accent); }
+    .badge.herramienta {
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+    .game-card .name {
+      font-weight: 750;
+      font-size: 1.02rem;
+      letter-spacing: -0.02em;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 32px 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Modal / Detail */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 16, 32, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal {
+      background: var(--surface-solid);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      width: min(720px, 100%);
+      padding: 28px 24px 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .modal-close:hover { border-color: var(--primary); color: var(--primary); }
+    .modal h2 {
+      font-size: 1.7rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 20px;
+      padding-right: 40px;
+    }
+    .detail-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .detail-img {
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 0;
+      overflow: hidden;
+    }
+    .detail-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 13px;
+    }
+    .detail-img.blur {
+      filter: blur(4px);
+      user-select: none;
+      pointer-events: none;
+    }
+    .detail-img:not(:has(img)) {
+      padding: 12px;
+    }
+    .detail-action {
+      margin-bottom: 32px;
+    }
+    .detail-action .btn { width: 100%; padding: 15px; font-size: 1rem; }
+    .detail-note {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .reviews-title {
+      font-size: 1.15rem;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .reviews {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .review {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--bg);
+    }
+    .review strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+    .review p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--line);
+    }
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .socials { display: flex; flex-wrap: wrap; gap: 8px; }
+    .socials a {
+      padding: 7px 11px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font-size: 0.8rem;
+      font-weight: 750;
+    }
+    .socials a:hover { color: var(--primary); border-color: var(--primary); }
+    .copyright { color: var(--muted); font-size: 0.8rem; }
+
+    /* Responsive */
+    @media (max-width: 780px) {
+      .hero-top { grid-template-columns: 1fr; gap: 28px; }
+      .magias-grid { grid-template-columns: 1fr; }
+      .detail-images { grid-template-columns: 1fr; }
+      .reviews { grid-template-columns: 1fr; }
+      .tab-buttons { width: 100%; }
+      .tab-btn { flex: 1; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="container" aria-label="Navegación principal">
+      <a class="brand" href="#" onclick="closeModal(); return false;">
+        <span class="brand-mark">R</span>Raku
+      </a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema">
+        <span id="theme-icon">☾</span>
+        <span id="theme-label">Oscuro</span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-top">
           <div>
-            <div class="eyebrow">Solucones rápidas. archivos listos.</div>
-            <h1>Juega más.<br />Sin pagar nada.</h1>
-            <p class="hero-copy">Encuentra las carpetas y archivos necesarios para que tus juegos abran a la primera. Sin rodeos y en minutos. Cuando necesites una mano, también puedes solicitar Soporte Premium.</p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="#guias">Ver guías gratis</a>
-              <a class="button button-secondary" href="#ayuda">Quiero Soporte Premium</a>
-            </div>
-            <div class="trust" aria-label="Compromisos de Raku">
-              <span><b class="check">✓</b> Explicado en video</span>
-              <span><b class="check">✓</b> Archivos listos para reemplazar</span>
-              <span><b class="check">✓</b> Sin pasos innecesarios</span>
+            <h1>Juega más<br>Paga Menos</h1>
+            <p class="hero-copy">
+              Magias gratis que se actualizan cada semana y soporte premium cuando necesitas que todo funcione al instante.
+            </p>
+            <div class="tab-buttons" role="tablist">
+              <button class="tab-btn active" data-target="gratis" type="button">Magias Gratis</button>
+              <button class="tab-btn premium-btn" data-target="premium" type="button">
+                Soporte Premium
+              </button>
             </div>
           </div>
-          <aside class="preview" aria-label="Ejemplo de una guía">
-            <div class="preview-window">
-              <div class="window-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-              <div class="guide-card">
-                <div class="guide-label"><span>GUÍA RÁPIDA</span><span>3 min</span></div>
-                <h2 class="guide-title">Compra tus juegos de forma fácil</h2>
-                <div class="steps">
-                  <div class="step"><span class="step-no">1</span>Revisa los requisitos de la guía</div>
-                  <div class="step"><span class="step-no">2</span>Sigue cada paso en el orden indicado</div>
-                  <div class="step"><span class="step-no">3</span>Comprueba que todo funciona</div>
-                </div>
-                <div class="safe-note">✦  Totalmente sin Virus.</div>
-              </div>
+
+          <aside class="featured-box">
+            <span class="new-badge">¡Nuevo!</span>
+            <h3 id="featured-name">Dragon Ball Sparking Zero</h3>
+            <p class="featured-sub">Recién agregado · Disponible ahora</p>
+            <div class="featured-placeholder" id="featured-img">
+              <video
+                src="https://i.imgur.com/DWRPfcy.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label="Video del juego recién agregado"
+              ></video>
             </div>
+            <button class="btn btn-primary" id="featured-btn" type="button">
+              Ver ahora
+            </button>
           </aside>
         </div>
-      </section>
 
-      <section class="offers" id="guias">
-        <div class="container">
-          <div class="section-heading">
-            <div class="eyebrow">Elige tu ritmo</div>
-            <h2>Dos formas de avanzar</h2>
-            <p>Empieza gratis y aprende a tu ritmo, o reserva tiempo para resolver tu problema con acompañamiento exclusivo.</p>
-          </div>
-          <div class="offer-grid">
-            <article class="offer">
-              <div class="offer-icon">▷</div>
-              <h3>Guías gratis</h3>
-              <p>Para quienes prefieren hacerlo por su cuenta con instrucciones breves y visuales.</p>
-              <ul>
-                <li>Pasos sencillos y ordenados</li>
-                <li>Archivos verificados</li>
-                <li>Videos cortos, próximamente</li>
-              </ul>
-              <a class="button button-secondary" href="#recursos">Explorar guías</a>
-            </article>
-            <article class="offer featured" id="ayuda">
-              <span class="featured-badge">★ MÁS ELEGIDO</span>
-              <div class="offer-icon">♛</div>
-              <h3>Soporte Premium</h3>
-              <p class="premium-note">Atención personalizada para avanzar sin perder tiempo.</p>
-              <p>Si te atascas, reserva una sesión para revisar una instalación permitida y entender qué hacer, paso a paso.</p>
-              <ul>
-                <li>Atención personalizada</li>
-                <li>Explicación durante el proceso</li>
-                <li>Precio claro antes de reservar</li>
-              </ul>
-              <a class="button button-primary" href="https://wa.me/51933231659?text=Deseo%20que%20me%20ayudes%20con%20el%20servicio%20premium." target="_blank" rel="noreferrer">✦ Consultar por WhatsApp</a>
-            </article>
-          </div>
-          <p class="disclaimer">Todo el contenido se crea para hacerte feliz y brindarte soporte técnico. Yo pongo el juego y tú pones la magia.</p>
-        </div>
-      </section>
-
-      <section class="resources" id="recursos">
-        <div class="container">
-          <div class="section-heading">
-            <div class="eyebrow">Magia para tus juego</div>
-            <h2>Solo material del bueno</h2>
-            <p>Magia lista para usar. Aquí tienes los recursos probados para saltarte los errores y dejar tu juego fino.</p>
-          </div>
-          <div class="resource-grid">
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de FC 26</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 01</span>
-                <h3>FC 26</h3>
-                <p>🔑 Código de extracción: Raku</p>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/14FXWhzXlUgrXMobEYnssx7ZLpPTdVRPU">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de GTA V</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 02</span>
-                <h3>GTA V</h3>
-                <p>🔑 Código de extracción: Raku</p>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/1Y9s071yj88LwtKyHvDlH-G_QkJd9kYRR">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de Steam Free</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 03</span>
-                <h3>Steam Free</h3>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://lua.tools/app">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de Mecha Chameleon Online</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 04</span>
-                <h3>Mecha Chameleon Online</h3>
-                <p>🔑 Código de extracción: Raku</p>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/1qGp3LW7PczwyLN7jelmuLbA9Zsb__iML">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de Dolin Tools</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 05</span>
-                <h3>Dolin Tools</h3>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/13eCNh0eKCmRIlBEvjhuySCbdbc-MDTw5">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de Big Walk</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 06</span>
-                <h3>Big Walk</h3>
-                <p>🔑 Código de extracción: Raku</p>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/1IO3rzxdIiEH6-I6abbzhjsrvx-Dz2X1W">Enlace</a>
-              </div>
-            </article>
-            <article class="resource-card">
-              <div class="game-video">
-                <div>
-                  <div class="play">▶</div>
-                  <strong>Video de Dragon Ball Sparking Zero</strong>
-                  <small>Tu tutorial de este juego aparecerá aquí.</small>
-                  <a class="button button-secondary" href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">Ver en YouTube</a>
-                </div>
-              </div>
-              <div class="game-resource">
-                <span class="game-tag">JUEGO 07</span>
-                <h3>Dragon Ball Sparking Zero</h3>
-                <p>🔑 Código de extracción: Raku</p>
-                <p>✅ Antes de instalar, desactiva temporalmente tu antivirus para evitar que bloquee algún archivo. Al terminar, vuelve a activarlo.</p>
-                <a class="button button-secondary" href="https://drive.google.com/file/d/1yb1yt82gXUWfv8RN5ynhTQMILGa8Srb_">Enlace</a>
-              </div>
-            </article>
+        <!-- Buscador -->
+        <div class="search-wrap">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="search" id="search-input" placeholder="Buscador — escribe el nombre del juego..." autocomplete="off" />
           </div>
         </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="container footer-row">
-        <a class="brand" href="#inicio"><span class="brand-mark">R</span>Raku</a>
-        <div class="socials" aria-label="Redes sociales">
-          <a href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer" aria-label="YouTube">YouTube</a>
-          <a href="https://www.tiktok.com/@rakuwin27" target="_blank" rel="noreferrer" aria-label="TikTok">TikTok</a>
-          <a href="https://www.instagram.com/rakuwin27" target="_blank" rel="noreferrer" aria-label="Instagram">Instagram</a>
-        </div>
-        <p class="copyright">© <span id="year"></span> Raku</p>
       </div>
-    </footer>
+    </section>
 
-    <script>
-      const toggle = document.getElementById('theme-toggle');
-      const icon = document.getElementById('theme-icon');
-      const label = document.getElementById('theme-label');
-      const savedTheme = localStorage.getItem('raku-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    <!-- MAGIAS -->
+    <section id="magias">
+      <div class="container">
+        <div class="magias-grid">
+          <!-- GRATIS -->
+          <div class="magias-col" id="col-gratis">
+            <div class="section-head">
+              <h3>Magias gratis</h3>
+              <p class="col-desc">Herramientas siempre gratis + 1 juego gratis cada semana. Se actualiza sola.</p>
+              <span class="week-note" id="week-label">Semana actual · rotación activa</span>
+            </div>
+            <div class="games-list" id="list-gratis"></div>
+          </div>
 
-      function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        const dark = theme === 'dark';
-        icon.textContent = dark ? '☀' : '☾';
-        label.textContent = dark ? 'Claro' : 'Oscuro';
-        toggle.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-        localStorage.setItem('raku-theme', theme);
+          <!-- PREMIUM -->
+          <div class="magias-col" id="col-premium">
+            <div class="section-head">
+              <h3>Magias Premium</h3>
+              <p class="col-desc">Desbloquea los juegos que quieras de forma remota, sin que tú tengas que hacer nada. Listos al instante.</p>
+            </div>
+            <div class="games-list" id="list-premium"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DETALLE -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+      <h2 id="modal-title">Juego</h2>
+
+      <div class="detail-images">
+        <div class="detail-img" id="modal-img1">imágenes del juego</div>
+        <div class="detail-img blur" id="modal-img2">carpeta de la magia<br>(borrosa)</div>
+      </div>
+
+      <div class="detail-action" id="modal-action">
+        <!-- Se llena con JS -->
+      </div>
+
+      <h3 class="reviews-title">Reseñas</h3>
+      <div class="reviews" id="modal-reviews">
+        <!-- Se llena con JS -->
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-row">
+      <a class="brand" href="#"><span class="brand-mark">R</span>Raku</a>
+      <div class="socials">
+        <a href="https://www.youtube.com/@Rakuwin27" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://www.tiktok.com/@rakuwin27" target="_blank" rel="noreferrer">TikTok</a>
+        <a href="https://www.instagram.com/rakuwin27" target="_blank" rel="noreferrer">Instagram</a>
+      </div>
+      <p class="copyright">© <span id="year"></span> Raku</p>
+    </div>
+  </footer>
+
+  <script>
+    // ========== DATOS DE JUEGOS ==========
+    // Cambia, añade o quita juegos aquí.
+    // type: "offline" | "online" | "herramienta"
+    // tags: palabras clave para el buscador (fifa, futbol, etc.)
+    // images: [img1, img2] — rutas o URLs de las imágenes del modal
+    // alwaysFree: true → siempre aparece en Magias Gratis (herramientas)
+    const GAMES = [
+      {
+        id: "fc26",
+        name: "FC 26",
+        type: "offline",
+        tags: ["fifa", "futbol", "fútbol", "soccer", "ea sports", "fc", "football"],
+        download: "https://drive.google.com/file/d/1OLFiVjwY0acyVw5bfuL671krmSvqjEOw",
+        images: ["https://imgur.com/zvGDwvU.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3405690/bcf8cde56e46d969dfaff90c8a9d85a22b6342fc/ss_bcf8cde56e46d969dfaff90c8a9d85a22b6342fc.jpg"],
+        reviews: [
+          { author: "Juan Alberto", text: "Muy buen trabajo, me gustó cómo fue lo fácil y rápido que lo hizo. 10/10" },
+          { author: "Johnatan", text: "El mejor, gracias por el juego, siempre lo quise jugar 😭" },
+          { author: "Riquelme", text: "Loco me dejaste el juego fino y sin pegar toda esa babosada del steam. Muy recomendable." }
+        ]
+      },
+      {
+        id: "gtav",
+        name: "GTA V",
+        type: "offline",
+        tags: ["gta", "grand theft auto", "gta5", "gta 5", "rockstar", "san andreas"],
+        download: "https://drive.google.com/file/d/1Y9s071yj88LwtKyHvDlH-G_QkJd9kYRR",
+        images: ["https://imgur.com/8Q3iavB.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3240220/85ff4a9fad2064c201c00c27d8d28c28fa03c481/ss_85ff4a9fad2064c201c00c27d8d28c28fa03c481.jpg"],
+        reviews: [
+          { author: "Carlos", text: "Funcionó a la primera, gracias!" },
+          { author: "Mati", text: "Lo mejor que hay, sin complicaciones." },
+          { author: "Sofi", text: "Recomendado 100%, súper rápido." }
+        ]
+      },
+      {
+        id: "luatools",
+        name: "Lua Tools",
+        type: "herramienta",
+        tags: ["lua", "steam free", "steam", "herramienta", "tools", "unlocker"],
+        download: "https://lua.tools/app",
+        images: ["https://imgur.com/uGvYV5W.jpg", "https://lua.tools/_next/image?url=%2Fapp-screenshot.png&w=1080&q=75.jpg"],
+        alwaysFree: true,
+        reviews: [
+          { author: "Diego", text: "Herramienta útil, fácil de usar." },
+          { author: "Ana", text: "Justo lo que necesitaba." },
+          { author: "Luis", text: "Buena alternativa." }
+        ]
+      },
+      {
+        id: "mecha",
+        name: "Mecha Chameleon Online",
+        type: "online",
+        tags: ["mecha", "chameleon", "online", "robot"],
+        download: "https://drive.google.com/file/d/1qGp3LW7PczwyLN7jelmuLbA9Zsb__iML",
+        images: ["https://imgur.com/6WbHEaQ.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4704690/2764a4a42c24a88d0bbb9b67e5c2bde979a24ac9/ss_2764a4a42c24a88d0bbb9b67e5c2bde979a24ac9.jpg"],
+        reviews: [
+          { author: "Pedro", text: "Online y sin problemas." },
+          { author: "Valeria", text: "Muy bueno el soporte." },
+          { author: "Kevin", text: "Rápido y limpio." }
+        ]
+      },
+      {
+        id: "dolin",
+        name: "Dolin Tools",
+        type: "herramienta",
+        tags: ["dolin", "herramienta", "tools", "tool"],
+        download: "https://drive.google.com/file/d/13eCNh0eKCmRIlBEvjhuySCbdbc-MDTw5",
+        images: ["https://imgur.com/enHnTNI.jpg", "https://imgur.com/93qWh8i.jpg"],
+        alwaysFree: true,
+        reviews: [
+          { author: "Andrés", text: "Herramienta top." },
+          { author: "Camila", text: "Funciona perfecto." },
+          { author: "Jorge", text: "La uso siempre." }
+        ]
+      },
+      {
+        id: "bigwalk",
+        name: "Big Walk",
+        type: "online",
+        tags: ["big walk", "walk", "online"],
+        download: "https://drive.google.com/file/d/1IO3rzxdIiEH6-I6abbzhjsrvx-Dz2X1W",
+        images: ["https://imgur.com/FZDf7f9.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1478500/fb03f4d478bfa9f90e655854c0b0b60fb81d7c7b/ss_fb03f4d478bfa9f90e655854c0b0b60fb81d7c7b.jpg"],
+        reviews: [
+          { author: "Felipe", text: "Excelente." },
+          { author: "Natalia", text: "Sin virus y rápido." },
+          { author: "Tomás", text: "Recomendado." }
+        ]
+      },
+      {
+        id: "dbsz",
+        name: "Dragon Ball Sparking Zero",
+        type: "online",
+        tags: ["dragon ball", "sparking zero", "dbz", "dbsz", "goku", "vegeta", "budokai", "sparking"],
+        download: "https://drive.google.com/file/d/1yb1yt82gXUWfv8RN5ynhTQMILGa8Srb_",
+        images: ["https://imgur.com/zXEiTIB.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1790600/ss_f4ec953421c54bf74bdca77ceed361ad7b509858.jpg"],
+        reviews: [
+          { author: "Riku", text: "El mejor, gracias!" },
+          { author: "Gohan", text: "Fino y sin fallos." },
+          { author: "Vegeta", text: "10/10, muy recomendable." }
+        ]
+      }
+    ];
+
+    // Número de JUEGOS (no herramientas) que estarán GRATIS cada semana
+    const FREE_COUNT = 1;
+
+    // ID del juego que aparece como "Recién agregado" en el hero
+    const FEATURED_ID = "dbsz";
+
+    // WhatsApp
+    const WHATSAPP = "51933231659";
+
+    // ========== ROTACIÓN SEMANAL ==========
+    function getWeekNumber(d = new Date()) {
+      const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const dayNum = date.getUTCDay() || 7;
+      date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    }
+
+    function seededShuffle(array, seed) {
+      const arr = [...array];
+      let s = seed;
+      for (let i = arr.length - 1; i > 0; i--) {
+        s = (s * 16807 + 0) % 2147483647;
+        const j = s % (i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getFreeIdsThisWeek() {
+      const week = getWeekNumber();
+      // Solo rotamos los juegos que NO son alwaysFree
+      const rotatable = GAMES.filter(g => !g.alwaysFree).map(g => g.id);
+      const shuffled = seededShuffle(rotatable, week * 97 + 13);
+      const freeSet = new Set(shuffled.slice(0, FREE_COUNT));
+      // Siempre agregar las herramientas
+      GAMES.filter(g => g.alwaysFree).forEach(g => freeSet.add(g.id));
+      return freeSet;
+    }
+
+    // ========== RENDER ==========
+    let freeIds = getFreeIdsThisWeek();
+    let currentFilter = "";
+
+    function matchesSearch(game, q) {
+      if (!q) return true;
+      const nameMatch = game.name.toLowerCase().includes(q);
+      const tagsMatch = (game.tags || []).some(t => t.toLowerCase().includes(q) || q.includes(t.toLowerCase()));
+      return nameMatch || tagsMatch;
+    }
+
+    function renderLists() {
+      const listGratis = document.getElementById("list-gratis");
+      const listPremium = document.getElementById("list-premium");
+      listGratis.innerHTML = "";
+      listPremium.innerHTML = "";
+
+      const q = currentFilter.trim().toLowerCase();
+
+      const freeGames = [];
+      const premiumGames = [];
+
+      GAMES.forEach(game => {
+        if (!matchesSearch(game, q)) return;
+        if (freeIds.has(game.id)) freeGames.push(game);
+        else premiumGames.push(game);
+      });
+
+      if (freeGames.length === 0) {
+        listGratis.innerHTML = `<div class="empty-state">No hay magias gratis que coincidan con la búsqueda.</div>`;
+      } else {
+        freeGames.forEach(g => listGratis.appendChild(createCard(g, true)));
       }
 
-      setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
-      toggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        setTheme(current === 'dark' ? 'light' : 'dark');
+      if (premiumGames.length === 0) {
+        listPremium.innerHTML = `<div class="empty-state">No hay magias premium que coincidan.</div>`;
+      } else {
+        premiumGames.forEach(g => listPremium.appendChild(createCard(g, false)));
+      }
+
+      document.getElementById("week-label").textContent =
+        `Semana ${getWeekNumber()} · se actualiza sola cada lunes`;
+    }
+
+    function createCard(game, isFree) {
+      const card = document.createElement("article");
+      card.className = "game-card";
+      const badgeClass = game.type === "herramienta" ? "herramienta" : game.type;
+      const badgeText = game.type === "herramienta" ? "Herramienta" : game.type;
+      card.innerHTML = `
+        <span class="badge ${badgeClass}">${badgeText}</span>
+        <span class="name">${game.name}</span>
+      `;
+      card.addEventListener("click", () => openModal(game, isFree));
+      return card;
+    }
+
+    // ========== MODAL ==========
+    function setModalImage(el, url, alt, shouldBlur = false) {
+      el.classList.toggle("blur", shouldBlur);
+      const cleanUrl = (url || "").trim();
+      if (cleanUrl) {
+        el.innerHTML = `<img src="${cleanUrl}" alt="${alt}" loading="lazy" onerror="this.style.display='none'; this.parentElement.textContent='No se pudo cargar la imagen';">`;
+      } else {
+        el.innerHTML = shouldBlur
+          ? "carpeta de la magia<br>(borrosa)"
+          : "imágenes del juego";
+      }
+    }
+
+    function openModal(game, isFree) {
+      document.getElementById("modal-title").textContent = game.name;
+
+      // Imágenes (soporta URLs directas o rutas locales)
+      const img1 = document.getElementById("modal-img1");
+      const img2 = document.getElementById("modal-img2");
+      setModalImage(img1, game.images?.[0], game.name, false);
+      setModalImage(img2, game.images?.[1], "Carpeta de la magia", true);
+
+      const action = document.getElementById("modal-action");
+      if (isFree) {
+        const isTool = game.type === "herramienta";
+        const btnText = isTool ? "Descargar Herramienta" : "Descargar magia gratis";
+        const noteText = isTool
+          ? "Descarga directa · Herramienta gratis"
+          : "Descarga directa · Sin soporte incluido";
+        action.innerHTML = `
+          <a class="btn btn-primary" href="${game.download}" target="_blank" rel="noreferrer">
+            ${btnText}
+          </a>
+          <p class="detail-note">${noteText}</p>
+        `;
+      } else {
+        const msg = encodeURIComponent(`Hola! Quiero el servicio premium para el juego: ${game.name}`);
+        action.innerHTML = `
+          <a class="btn btn-gold" href="https://wa.me/${WHATSAPP}?text=${msg}" target="_blank" rel="noreferrer">
+            OBTENER SERVICIO PREMIUM
+          </a>
+          <p class="detail-note">Te atiendo por WhatsApp · Instalación remota y soporte</p>
+        `;
+      }
+
+      const reviewsEl = document.getElementById("modal-reviews");
+      reviewsEl.innerHTML = game.reviews.map(r => `
+        <div class="review">
+          <strong>${r.author}</strong>
+          <p>${r.text}</p>
+        </div>
+      `).join("");
+
+      document.getElementById("modal-overlay").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById("modal-overlay").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    // ========== FEATURED ==========
+    function setupFeatured() {
+      const featured = GAMES.find(g => g.id === FEATURED_ID);
+      if (!featured) return;
+      document.getElementById("featured-name").textContent = featured.name;
+      const btn = document.getElementById("featured-btn");
+      btn.addEventListener("click", () => {
+        const isFree = freeIds.has(featured.id);
+        openModal(featured, isFree);
       });
-      document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
-  </body>
+    }
+
+    // ========== EVENTOS ==========
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    document.getElementById("modal-overlay").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("modal-overlay")) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    document.getElementById("search-input").addEventListener("input", (e) => {
+      currentFilter = e.target.value;
+      renderLists();
+    });
+
+    // Tabs
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const target = btn.dataset.target;
+        const el = target === "gratis"
+          ? document.getElementById("col-gratis")
+          : document.getElementById("col-premium");
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // Tema
+    const toggle = document.getElementById("theme-toggle");
+    const icon = document.getElementById("theme-icon");
+    const label = document.getElementById("theme-label");
+    const savedTheme = localStorage.getItem("raku-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      const dark = theme === "dark";
+      icon.textContent = dark ? "☀" : "☾";
+      label.textContent = dark ? "Claro" : "Oscuro";
+      toggle.setAttribute("aria-label", dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
+      localStorage.setItem("raku-theme", theme);
+    }
+    setTheme(savedTheme || (prefersDark ? "dark" : "light"));
+    toggle.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Inicial
+    setupFeatured();
+    renderLists();
+  </script>
+</body>
 </html>
